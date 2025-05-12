@@ -1,0 +1,10 @@
+streamlit
+PyPDF2
+langchain>=0.1.14
+langchain-community>=0.0.14
+langchain-huggingface>=0.0.6
+huggingface-hub
+faiss-cpu
+python-dotenv
+transformers
+sentence-transformers
