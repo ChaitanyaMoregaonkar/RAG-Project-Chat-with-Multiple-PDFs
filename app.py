@@ -2,13 +2,13 @@ from PyPDF2 import PdfReader
 import streamlit as st
 from dotenv import load_dotenv
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
 from huggingface_hub import login
 import os
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
-from langchain.llms import HuggingFaceHub
+from langchain_huggingface import HuggingFaceEndpoint
 
 
 def get_pdf_text(uploaded_files):
@@ -40,11 +40,13 @@ def get_vector_store(text_chunks):
 
 
 def get_conversation_chain(vector_store):
-    llm = HuggingFaceHub(
-        repo_id="google/flan-t5-large",
-        model_kwargs={"temperature": 0, "max_length": 512},
-        task="text-generation",
+    
+    llm = HuggingFaceEndpoint(
+    repo_id="HuggingFaceH4/zephyr-7b-beta",
+    temperature=0.01,
+    max_new_tokens=512  
     )
+
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True, output_key="answer")
     conversation_chain = ConversationalRetrievalChain.from_llm( 
         llm=llm,
